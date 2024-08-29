@@ -67,11 +67,7 @@ class InscriptionController extends AbstractController
                 $request
             );
         } catch (Exception $e) {
-            return $this->render('inscription/index.html.twig', [
-                'souffles' => $this->souffle_manager->getBreathings(),
-                'grades' => $this->grade_manager->getGrades(),
-                'error' => 'Erreur lors de l\'inscription : ' . $e->getMessage(),
-            ]);
+            return $this->redirectToRoute('app_login');
         }
     }
 }
