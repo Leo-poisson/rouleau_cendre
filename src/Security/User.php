@@ -15,7 +15,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct(array $userData)
     {
-        $this->id_user = $userData['id_user'] ?? null;
+        $this->id_user = $userData['id_user'];
         $this->name_user = $userData['name_user'];
         $this->pswd_user = $userData['pswd_user'];
         $this->id_grade = $userData['id_grade'];
@@ -80,10 +80,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials()
     {
         // Si vous stockez des informations sensibles, vous pouvez les effacer ici
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id_user;
     }
 }

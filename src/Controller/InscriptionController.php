@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\NativePasswordHasher;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class InscriptionController extends AbstractController
@@ -24,8 +25,12 @@ class InscriptionController extends AbstractController
     ) { }
 
     #[Route('/inscription', name: 'app_inscription')]
-    public function index(): Response
+    public function index(AuthenticationUtils $authenticationUtils): Response
     {
+        $error = $authenticationUtils->getLastAuthenticationError();
+
+        $lastUsername = $authenticationUtils->getLastUsername();
+
         return $this->render('inscription/index.html.twig', [
             'souffles' => $this->souffle_manager->getBreathings(),
             'grades' => $this->grade_manager->getGrades(),
@@ -38,7 +43,7 @@ class InscriptionController extends AbstractController
     #[Route('/inscrit', name: 'app_inscrit', methods: ['POST'])]
     public function inscrit(
         Request $request,
-        NativePasswordHasher $password_hasher,
+        NativePasswordHasher $passwordHasher,
         UserAuthenticatorInterface $userAuthenticator,
         LoginFormAuthenticator $authenticator
     ): Response
@@ -48,26 +53,27 @@ class InscriptionController extends AbstractController
         $souffle = $request->get('souffle-pourf');
         $grade = $request->get('grade-pourf');
 
-        $hashed_pswd = $password_hasher->hash($pswd);
+        $hashedPswd = $passwordHasher->hash($pswd);
 
-        try {
-            $userId = $this->inscription_manager->inscription($identite, $hashed_pswd, $souffle, $grade);
+            // Insérer l'utilisateur dans la base de données
+            $this->inscription_manager->inscription($identite, $hashedPswd, $souffle, $grade);
+            $id_user = $this->inscription_manager->getNewUser($identite, $souffle, $grade);
 
+            // Créer une instance de votre classe User
             $user = new User([
-                'id_user' => $userId,
+                'id_user' => $id_user,
                 'name_user' => $identite,
-                'pswd_user' => $hashed_pswd,
+                'pswd_user' => $hashedPswd,
                 'id_grade' => $grade,
-                'id_souffle' => $souffle
+                'id_souffle' => $souffle,
             ]);
 
+            // Authentifier l'utilisateur et le connecter automatiquement
             return $userAuthenticator->authenticateUser(
                 $user,
                 $authenticator,
                 $request
             );
-        } catch (Exception $e) {
-            return $this->redirectToRoute('app_login');
-        }
+
     }
 }

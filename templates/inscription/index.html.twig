@@ -29,6 +29,9 @@
                     {% endfor %}
                 </select>
             </div>
+            <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token('authenticate') }}"
+            >
             <button type="submit" class="btn btn-primary">Dévérouiller le parchemin</button>
         </form>
     </div>

@@ -28,7 +28,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     protected function getLoginUrl(Request $request): string
     {
-        return $this->urlGenerator->generate('app_connexion');
+        return $this->urlGenerator->generate('app_login');
     }
 
     public function authenticate(Request $request): Passport
