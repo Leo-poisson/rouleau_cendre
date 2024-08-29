@@ -37,9 +37,6 @@ class InscriptionController extends AbstractController
         ]);
     }
 
-    /**
-     * @throws \Doctrine\DBAL\Exception
-     */
     #[Route('/inscrit', name: 'app_inscrit', methods: ['POST'])]
     public function inscrit(
         Request $request,
@@ -55,25 +52,24 @@ class InscriptionController extends AbstractController
 
         $hashedPswd = $passwordHasher->hash($pswd);
 
-            // Insérer l'utilisateur dans la base de données
-            $this->inscription_manager->inscription($identite, $hashedPswd, $souffle, $grade);
-            $id_user = $this->inscription_manager->getNewUser($identite, $souffle, $grade);
+        // Insérer l'utilisateur dans la base de données
+        $this->inscription_manager->inscription($identite, $hashedPswd, $souffle, $grade);
+        $id_user = $this->inscription_manager->getNewUser($identite, $souffle, $grade);
 
-            // Créer une instance de votre classe User
-            $user = new User([
-                'id_user' => $id_user,
-                'name_user' => $identite,
-                'pswd_user' => $hashedPswd,
-                'id_grade' => $grade,
-                'id_souffle' => $souffle,
-            ]);
+        // Créer une instance de votre classe User
+        $user = new User([
+            'id_user' => $id_user,
+            'name_user' => $identite,
+            'pswd_user' => $hashedPswd,
+            'id_grade' => $grade,
+            'id_souffle' => $souffle,
+        ]);
 
-            // Authentifier l'utilisateur et le connecter automatiquement
-            return $userAuthenticator->authenticateUser(
-                $user,
-                $authenticator,
-                $request
-            );
-
+        // Authentifier l'utilisateur et le connecter automatiquement
+        return $userAuthenticator->authenticateUser(
+            $user,
+            $authenticator,
+            $request
+        );
     }
 }
