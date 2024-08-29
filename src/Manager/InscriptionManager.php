@@ -27,6 +27,10 @@ class InscriptionManager
             'id_grade' => $id_grade,
         ]);
 
-        return true;
+        return $this->db->fetchAssociative('
+            SELECT id_user FROM "user" WHERE name_user = :nom_user
+        ', ['
+            nom_user' => $nom_user
+        ]);
     }
 }

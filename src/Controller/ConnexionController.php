@@ -9,41 +9,33 @@ use Symfony\Component\PasswordHasher\Hasher\NativePasswordHasher;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Manager\ConnexionManager;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class ConnexionController extends AbstractController
 {
-    public function __construct(
-        private UserManager $user_manager,
-    ) { }
-
     #[Route('/connexion', name: 'app_connexion')]
     public function index(): Response
     {
         return $this->render('connexion/index.html.twig');
     }
 
+
     #[Route('/connected', name: 'app_connected')]
-    public function connected(Request $request, NativePasswordHasher $password_hasher): Response
+    public function connected(AuthenticationUtils $authenticationUtils): Response
     {
-        $identite = $request->get('identite-pourf');
-        $pswd = $request->get('pswd-pourf');
+        $error = $authenticationUtils->getLastAuthenticationError();
 
-        $user = $this->user_manager->findUser($identite);
+        $lastUsername = $authenticationUtils->getLastUsername();
 
-        if (!$user) {
-            return $this->render('connexion/index.html.twig', [
-                'error' => 'Utilisateur non trouvé',
-            ]);
-        }
+        return $this->redirectToRoute('app_home', [
+            'last_username' => $lastUsername,
+            'error' => $error,
+        ]);
+    }
 
-        if ($password_hasher->verify($user['pswd_user'], $pswd)) {
-            return $this->render('home/index.html.twig', [
-                'user' => $user,
-            ]);
-        } else {
-            return $this->render('connexion/index.html.twig', [
-                'error' => 'Mot de passe incorrect',
-            ]);
-        }
+    #[Route('/logout', name: 'app_logout', methods: ['GET'])]
+    public function logout(): void
+    {
+        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 }
