@@ -32,6 +32,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->pswd_user;
     }
 
+    public function getIdSouffle(): ?string
+    {
+        return $this->id_souffle;
+    }
+
     public function getRoles(): array
     {
         $roles = [];

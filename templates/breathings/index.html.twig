@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% for souffle in souffles %}
+        {% if souffle.id_souffle == souffle_user %}
+            Documents de souffle : {{ souffle.nom_souffle }}
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+{% block body %}
+    <header class="d-flex justify-content-center align-items-center">
+        <h1>
+            {% for souffle in souffles %}
+                {% if souffle.id_souffle == souffle_user %}
+                    {{ souffle.nom_souffle }}
+                {% endif %}
+            {% endfor %}
+        </h1>
+    </header>
+{% endblock %}

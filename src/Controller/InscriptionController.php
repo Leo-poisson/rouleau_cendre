@@ -26,12 +26,8 @@ class InscriptionController extends AbstractController
     ) { }
 
     #[Route('/inscription', name: 'app_inscription')]
-    public function index(AuthenticationUtils $authenticationUtils): Response
+    public function index(): Response
     {
-        $error = $authenticationUtils->getLastAuthenticationError();
-
-        $lastUsername = $authenticationUtils->getLastUsername();
-
         return $this->render('inscription/index.html.twig', [
             'souffles' => $this->souffle_manager->getBreathings(),
             'grades' => $this->grade_manager->getGrades(),
@@ -42,8 +38,6 @@ class InscriptionController extends AbstractController
     public function inscrit(
         Request $request,
         NativePasswordHasher $passwordHasher,
-        UserAuthenticatorInterface $userAuthenticator,
-        LoginFormAuthenticator $authenticator,
         Security $security
     ): Response
     {
