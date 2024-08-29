@@ -9,6 +9,7 @@ use App\Security\LoginFormAuthenticator;
 use App\Security\User;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\NativePasswordHasher;
@@ -42,7 +43,8 @@ class InscriptionController extends AbstractController
         Request $request,
         NativePasswordHasher $passwordHasher,
         UserAuthenticatorInterface $userAuthenticator,
-        LoginFormAuthenticator $authenticator
+        LoginFormAuthenticator $authenticator,
+        Security $security
     ): Response
     {
         $identite = $request->get('identite-pourf');
@@ -52,11 +54,9 @@ class InscriptionController extends AbstractController
 
         $hashedPswd = $passwordHasher->hash($pswd);
 
-        // Insérer l'utilisateur dans la base de données
         $this->inscription_manager->inscription($identite, $hashedPswd, $souffle, $grade);
         $id_user = $this->inscription_manager->getNewUser($identite, $souffle, $grade);
 
-        // Créer une instance de votre classe User
         $user = new User([
             'id_user' => $id_user,
             'name_user' => $identite,
@@ -65,11 +65,8 @@ class InscriptionController extends AbstractController
             'id_souffle' => $souffle,
         ]);
 
-        // Authentifier l'utilisateur et le connecter automatiquement
-        return $userAuthenticator->authenticateUser(
-            $user,
-            $authenticator,
-            $request
-        );
+        $security->login($user);
+
+        return $this->redirectToRoute('app_home');
     }
 }
