@@ -48,13 +48,13 @@ class InscriptionController extends AbstractController
         $identite = $request->get('name-user');
         $pswd = $request->get('pswd-user');
         $faction = $request->get('faction-user');
-        $capacitie = $request->get('capacitie-user');
+        $capacity = $request->get('capacity-user');
         $grade = $request->get('grade-user');
 
         $hashedPswd = $passwordHasher->hash($pswd);
 
-        $this->inscription_manager->inscription($identite, $hashedPswd, $capacitie, $grade, $faction);
-        $id_user = $this->inscription_manager->getNewUser($identite, $capacitie, $grade, $faction);
+        $this->inscription_manager->inscription($identite, $hashedPswd, $capacity, $grade, $faction);
+        $id_user = $this->inscription_manager->getNewUser($identite, $capacity, $grade, $faction);
 
         $user = new User([
             'id_user' => $id_user,
@@ -62,7 +62,7 @@ class InscriptionController extends AbstractController
             'pswd_user' => $hashedPswd,
             'id_faction' => $faction,
             'grade_user' => $grade,
-            'capacitie_user' => $capacitie,
+            'capacity_user' => $capacity,
         ]);
 
         $security->login($user);

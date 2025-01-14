@@ -1,64 +1,68 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 export default function ({ factions }) {
-    const [isDemon, setIsDemon] = useState(null);
+    const [selectedFaction, setSelectedFaction] = useState(null);
     const [capacity, setCapacity] = useState(null);
     const [grade, setGrade] = useState(null);
 
-    const HandleFactionChange = (e) => {
-        setIsDemon(e.target.value);
-    }
+    const handleFactionChange = (e) => {
+        const factionId = parseInt(e.target.value, 10);
+        setSelectedFaction(factions.find(faction => faction.id_faction === factionId));
+        setCapacity(null);
+        setGrade(null);
+    };
 
-    const HandleCapacitieChange = (e) => {
+    const handleCapacitieChange = (e) => {
         setCapacity(e.target.value);
-    }
+    };
 
-    const HandleGradeChange = (e) => {
+    const handleGradeChange = (e) => {
         setGrade(e.target.value);
-    }
+    };
 
     return (
         <>
             <div className="mb-3">
-                <label htmlFor="identite-user" className="form-label">Identité</label>
-                <input type="text" className="form-control" id="identite-user" name="identite-user"/>
+                <label htmlFor="name-user" className="form-label">Identité</label>
+                <input type="text" className="form-control" id="name-user" name="name-user" required/>
             </div>
             <div className="mb-3">
                 <label htmlFor="pswd-user" className="form-label">Code secret</label>
-                <input type="password" className="form-control" id="pswd-user" name="pswd-user"/>
+                <input type="password" className="form-control" id="pswd-user" name="pswd-user" required/>
             </div>
             <div className="mb-3">
                 <label htmlFor="faction-user" className="form-label">Faction</label>
-                <select className="form-select" id="faction-user" name="faction-user" onChange={HandleFactionChange} defaultValue={isDemon}>
-                    {!isDemon && <option>Choisissez votre faction ...</option>}
+                <select className="form-select" id="faction-user" name="faction-user" onChange={handleFactionChange} defaultValue="" required>
+                    <option value="" disabled>Choisissez votre faction ...</option>
                     {factions.map(faction => (
-                        <option key={faction.name_faction} value={faction.id_faction}>{faction.name_faction}</option>
+                        <option key={faction.id_faction} value={faction.id_faction}>
+                            {faction.name_faction}
+                        </option>
                     ))}
                 </select>
             </div>
-            {isDemon &&
+            {selectedFaction && (
                 <>
                     <div className="mb-3">
-                        <label htmlFor="capacitie_user" className="form-label">Souffle / Pouvoir sanguinaire</label>
-                        <select className="form-select" id="capacitie_user" name="capacitie_user" onChange={HandleCapacitieChange} defaultValue={capacity}>
-                            {factions.map(faction => {
-                                if (faction.id_faction === isDemon) {
-                                    console.log(faction.capacities_faction.name_capacity);
-                                }
-                                /*faction.capacities_faction.name_capacity.map(capacity => (
-                                    <option key={capacity} value={capacity}>{capacity}</option>
-                                ))*/
-                            })}
+                        <label htmlFor="capacitie-user" className="form-label">Souffle / Pouvoir sanguinaire</label>
+                        <select className="form-select" id="capacitie-user" name="capacitie-user" onChange={handleCapacitieChange} value={capacity || ""} required>
+                            <option value="" disabled>Choisissez votre souffle / pouvoir sanguinaire...</option>
+                            {selectedFaction.capacities_faction.name_capacitie.map((cap, index) => (
+                                <option key={index} value={cap}>{cap}</option>
+                            ))}
                         </select>
                     </div>
                     <div className="mb-3">
-                        <label htmlFor="grade_user" className="form-label">Grade</label>
-                        <select className="form-select" id="grade_user" name="grade_user" onChange={HandleGradeChange} defaultValue={grade}>
-
+                        <label htmlFor="grade-user" className="form-label">Grade</label>
+                        <select className="form-select" id="grade-user" name="grade-user" onChange={handleGradeChange} value={grade || ""} required>
+                            <option value="" disabled>Choisissez votre grade...</option>
+                            {selectedFaction.grades_faction.name_grade.map((grd, index) => (
+                                <option key={index} value={grd}>{grd}</option>
+                            ))}
                         </select>
                     </div>
                 </>
-            }
+            )}
         </>
-    )
+    );
 }
