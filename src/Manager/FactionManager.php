@@ -4,13 +4,13 @@ namespace App\Manager;
 
 use Doctrine\DBAL\Connection;
 
-class SouffleManager
+class FactionManager
 {
     public function __construct(
         private Connection $db,
     ) { }
 
-    public function getBreathings() {
-        return $this->db->fetchAllAssociative("SELECT * FROM souffle");
+    public function getFactions() {
+        return $this->db->fetchAllAssociative("SELECT * FROM faction");
     }
 }

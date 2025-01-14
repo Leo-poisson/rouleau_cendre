@@ -11,18 +11,19 @@ class InscriptionManager
         private Connection $db,
     ) { }
 
-    public function inscription($nom_user, $pswd_user, $id_souffle, $id_grade)
+    public function inscription($nom_user, $pswd_user, $capacitie, $grade, $faction)
     {
         try {
             $this->db->executeStatement('
                 INSERT INTO "user" 
-                (id_grade, id_souffle, name_user, pswd_user) 
-                VALUES (:id_grade, :id_souffle, :nom_user, :pswd_user)
+                (name_user, pswd_user, id_faction, grade_user, capacitie_user 
+                VALUES (:nom_user, :pswd_user, :id_faction, :grade_user, :capacitie_user)
             ', [
                 'nom_user' => $nom_user,
                 'pswd_user' => $pswd_user,
-                'id_souffle' => $id_souffle,
-                'id_grade' => $id_grade,
+                'id_faction' => $faction,
+                'capacitie_user' => $capacitie,
+                'grade_user' => $grade,
             ]);
 
             return true;
@@ -31,17 +32,18 @@ class InscriptionManager
         }
     }
 
-    public function getNewUser($nom_user, $id_souffle, $id_grade)
+    public function getNewUser($nom_user, $capacitie, $grade, $faction)
     {
         try {
             $this->db->fetchAssociative('
                 SELECT id_user 
                 FROM "user"
-                WHERE name_user = :nom_user AND id_souffle = :id_souffle AND id_grade = :id_grade
+                WHERE name_user = :name_user AND capacitie_user = :capacitie_user AND grade_user = :grade_user AND id_faction = :id_faction
             ', [
-                'nom_user' => $nom_user,
-                'id_souffle' => $id_souffle,
-                'id_grade' => $id_grade,
+                'name_user' => $nom_user,
+                'capacitie_user' => $capacitie,
+                'grade_user' => $grade,
+                'id_faction' => $faction,
             ]);
 
             return true;

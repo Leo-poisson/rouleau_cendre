@@ -10,16 +10,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id_user;
     private string $name_user;
     private string $pswd_user;
-    private int $id_grade;
-    private int $id_souffle;
+    private string $id_faction;
+    private int $grade_user;
+    private int $capacitie_user;
 
     public function __construct(array $userData)
     {
         $this->id_user = $userData['id_user'];
         $this->name_user = $userData['name_user'];
         $this->pswd_user = $userData['pswd_user'];
-        $this->id_grade = $userData['id_grade'];
-        $this->id_souffle = $userData['id_souffle'];
+        $this->id_faction = $userData['id_faction'];
+        $this->grade_user = $userData['grade_user'];
+        $this->capacitie_user = $userData['capacitie_user'];
     }
 
     public function getUserIdentifier(): string
@@ -32,49 +34,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->pswd_user;
     }
 
-    public function getIdSouffle(): ?string
+    public function getIdFaction(): ?int
     {
-        return $this->id_souffle;
+        return $this->id_faction;
+    }
+
+    public function getCapacitie(): ?string
+    {
+        return $this->capacitie_user;
+    }
+
+    public function getGrade(): ?string
+    {
+        return $this->grade_user;
     }
 
     public function getRoles(): array
     {
         $roles = [];
+        $roles[] = 'ROLE_USER';
+        $roles[] = 'ROLE_MIZU';
+        $roles[] = 'ROLE_FACTION_1';
+        $roles[] = 'ROLE_VENT';
+        $roles[] = 'ROLE_POURF';
+        // $roles = ['ROLE_USER', 'ROLE_MIZU', 'ROLE_FACTION_1', 'ROLE_VENT', 'ROLE_POURF'];
 
-        switch ($this->id_grade) {
-            case 1:
-                $roles[] = 'ROLE_MIZUNOTO';
-                break;
-            case 2:
-                $roles[] = 'ROLE_MIZUNOE';
-                break;
-            case 3:
-                $roles[] = 'ROLE_KANOTO';
-                break;
-            case 4:
-                $roles[] = 'ROLE_KANOE';
-                break;
-            case 5:
-                $roles[] = 'ROLE_TSUCHINOTO';
-                break;
-            case 6:
-                $roles[] = 'ROLE_TSUCHINOE';
-                break;
-            case 7:
-                $roles[] = 'ROLE_HINOTO';
-                break;
-            case 8:
-                $roles[] = 'ROLE_HINOE';
-                break;
-            case 9:
-                $roles[] = 'ROLE_KINOTO';
-                break;
-            case 10:
-                $roles[] = 'ROLE_KINOE';
-                break;
-            case 11:
-                $roles[] = 'ROLE_PILIER';
-                break;
+        switch ($this->grade_user) {
             default:
                 $roles[] = 'ROLE_USER';
         }

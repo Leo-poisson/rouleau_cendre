@@ -5,30 +5,7 @@
 {% block body %}
     <div>
         <form method="post" action="{{ path('app_inscrit') }}">
-            <div class="mb-3">
-                <label for="identite-pourf" class="form-label">Identité</label>
-                <input type="text" class="form-control" id="identite-pourf" name="identite-pourf">
-            </div>
-            <div class="mb-3">
-                <label for="pswd-pourf" class="form-label">Code secret</label>
-                <input type="password" class="form-control" id="pswd-pourf" name="pswd-pourf">
-            </div>
-            <div class="mb-3">
-                <label for="souffle-pourf" class="form-label">Souffle</label>
-                <select class="form-select" id="pswd-pourf" name="souffle-pourf">
-                    {% for souffle in souffles %}
-                        <option value="{{ souffle.id_souffle }}">{{ souffle.nom_souffle }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="grade-pourf" class="form-label">Grade</label>
-                <select class="form-select" id="pswd-pourf" name="grade-pourf">
-                    {% for grade in grades %}
-                        <option value="{{ grade.id_grade }}">{{ grade.nom_grade }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+            <div {{ react_component('InscriptionForm',{'factions' : factions})}}></div>
             <input type="hidden" name="_csrf_token"
                    value="{{ csrf_token('authenticate') }}"
             >

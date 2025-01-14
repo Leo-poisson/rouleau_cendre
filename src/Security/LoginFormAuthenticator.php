@@ -33,8 +33,8 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function authenticate(Request $request): Passport
     {
-        $identite = $request->request->get('identite-pourf', '');
-        $pswd = $request->request->get('pswd-pourf', '');
+        $identite = $request->request->get('name-user', '');
+        $pswd = $request->request->get('pswd-user', '');
 
         return new Passport(
             new UserBadge($identite),
