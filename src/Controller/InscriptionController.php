@@ -53,20 +53,24 @@ class InscriptionController extends AbstractController
 
         $hashedPswd = $passwordHasher->hash($pswd);
 
-        $this->inscription_manager->inscription($identite, $hashedPswd, $capacity, $grade, $faction);
-        $id_user = $this->inscription_manager->getNewUser($identite, $capacity, $grade, $faction);
+        try {
+            $this->inscription_manager->inscription($identite, $hashedPswd, $capacity, $grade, $faction);
+            $id_user = $this->inscription_manager->getNewUser($identite, $capacity, $grade, $faction);
 
-        $user = new User([
-            'id_user' => $id_user,
-            'name_user' => $identite,
-            'pswd_user' => $hashedPswd,
-            'id_faction' => $faction,
-            'grade_user' => $grade,
-            'capacity_user' => $capacity,
-        ]);
+            $user = new User([
+                'id_user' => $id_user,
+                'name_user' => $identite,
+                'pswd_user' => $hashedPswd,
+                'id_faction' => $faction,
+                'grade_user' => $grade,
+                'capacity_user' => $capacity,
+            ]);
 
-        $security->login($user);
+            $security->login($user);
 
-        return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('app_home');
+        } catch (\Exception $e) {
+            return $this->redirectToRoute('app_inscription');
+        }
     }
 }

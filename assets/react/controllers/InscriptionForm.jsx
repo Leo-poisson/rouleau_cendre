@@ -44,8 +44,8 @@ export default function ({ factions }) {
             {selectedFaction && (
                 <>
                     <div className="mb-3">
-                        <label htmlFor="capacitie-user" className="form-label">Souffle / Pouvoir sanguinaire</label>
-                        <select className="form-select" id="capacitie-user" name="capacitie-user" onChange={handleCapacitieChange} value={capacity || ""} required>
+                        <label htmlFor="capacity-user" className="form-label">Souffle / Pouvoir sanguinaire</label>
+                        <select className="form-select" id="capacity-user" name="capacity-user" onChange={handleCapacitieChange} value={capacity || ""} required>
                             <option value="" disabled>Choisissez votre souffle / pouvoir sanguinaire...</option>
                             {selectedFaction.capacities_faction.name_capacitie.map((cap, index) => (
                                 <option key={index} value={cap}>{cap}</option>

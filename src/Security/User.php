@@ -11,8 +11,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $name_user;
     private string $pswd_user;
     private string $id_faction;
-    private int $grade_user;
-    private int $capacitie_user;
+    private string $grade_user;
+    private string $capacity_user;
 
     public function __construct(array $userData)
     {
@@ -21,7 +21,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->pswd_user = $userData['pswd_user'];
         $this->id_faction = $userData['id_faction'];
         $this->grade_user = $userData['grade_user'];
-        $this->capacitie_user = $userData['capacitie_user'];
+        $this->capacity_user = $userData['capacity_user'];
     }
 
     public function getUserIdentifier(): string
@@ -39,9 +39,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id_faction;
     }
 
-    public function getCapacitie(): ?string
+    public function getCapacity(): ?string
     {
-        return $this->capacitie_user;
+        return $this->capacity_user;
     }
 
     public function getGrade(): ?string
