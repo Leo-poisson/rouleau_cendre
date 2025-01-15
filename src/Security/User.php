@@ -7,7 +7,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    private ?int $id_user;
+    private ?string $id_user;
     private string $name_user;
     private string $pswd_user;
     private string $id_faction;

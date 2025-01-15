@@ -57,7 +57,7 @@ class InscriptionController extends AbstractController
             $id_user = $this->inscription_manager->inscription($identite, $hashedPswd, $capacity, $grade, $faction);
 
             $user = new User([
-                'id_user' => (int) $id_user,
+                'id_user' => (string) $id_user,
                 'name_user' => $identite,
                 'pswd_user' => $hashedPswd,
                 'id_faction' => $faction,

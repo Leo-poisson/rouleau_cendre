@@ -13,11 +13,22 @@ class InscriptionManager
 
     public function inscription($nom_user, $pswd_user, $capacity, $grade, $faction)
     {
-        $this->db->executeStatement('
+        $user = $this->db->fetchAssociative('SELECT * FROM "user" WHERE name_user = :nom_user', [
+            'nom_user' => $nom_user,
+        ]);
+
+        if ($user) {
+            throw new \InvalidArgumentException('Un utilisateur avec ce nom existe déjà');
+        }
+
+        $sql = '
             INSERT INTO "user" 
-            (name_user, pswd_user, id_faction, grade_user, capacity_user)
-            VALUES (:nom_user, :pswd_user, :id_faction, :grade_user, :capacity_user)
-        ', [
+            (id_user, name_user, pswd_user, id_faction, grade_user, capacity_user)
+            VALUES (uuid_generate_v4(), :nom_user, :pswd_user, :id_faction, :grade_user, :capacity_user)
+            RETURNING id_user
+        ';
+
+        $id_user = $this->db->fetchOne($sql, [
             'nom_user' => $nom_user,
             'pswd_user' => $pswd_user,
             'id_faction' => $faction,
@@ -25,6 +36,6 @@ class InscriptionManager
             'grade_user' => $grade,
         ]);
 
-        return $this->db->lastInsertId();
+        return $id_user;
     }
 }
