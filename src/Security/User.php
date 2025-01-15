@@ -52,16 +52,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = [];
-        $roles[] = 'ROLE_USER';
-        $roles[] = 'ROLE_MIZU';
-        $roles[] = 'ROLE_FACTION_1';
-        $roles[] = 'ROLE_VENT';
-        $roles[] = 'ROLE_POURF';
-        // $roles = ['ROLE_USER', 'ROLE_MIZU', 'ROLE_FACTION_1', 'ROLE_VENT', 'ROLE_POURF'];
 
-        switch ($this->grade_user) {
-            default:
-                $roles[] = 'ROLE_USER';
+        if ($this->grade_user && $this->capacity_user && $this->id_faction) {
+            $roles[] = 'ROLE_' . strtoupper($this->grade_user);
+            $roles[] = 'ROLE_' . strtoupper($this->capacity_user);
+            $roles[] = 'ROLE_FACTION_' . $this->id_faction;
         }
 
         return array_unique($roles);

@@ -54,11 +54,10 @@ class InscriptionController extends AbstractController
         $hashedPswd = $passwordHasher->hash($pswd);
 
         try {
-            $this->inscription_manager->inscription($identite, $hashedPswd, $capacity, $grade, $faction);
-            $id_user = $this->inscription_manager->getNewUser($identite, $capacity, $grade, $faction);
+            $id_user = $this->inscription_manager->inscription($identite, $hashedPswd, $capacity, $grade, $faction);
 
             $user = new User([
-                'id_user' => $id_user,
+                'id_user' => (int) $id_user,
                 'name_user' => $identite,
                 'pswd_user' => $hashedPswd,
                 'id_faction' => $faction,
