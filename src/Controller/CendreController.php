@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Manager\UserManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +18,10 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/cendre-mortuaire')]
 class CendreController extends AbstractController
 {
+    public function __construct(
+        private UserManager $user_manager,
+    ) {  }
+
     #[Route('/informations-generales', name: 'app_cendre_informations_generales')]
     public function InformationsGenerales(): Response
     {
@@ -57,5 +62,13 @@ class CendreController extends AbstractController
     public function Connaissances(): Response
     {
         return $this->render('cendre/connaissances.html.twig');
+    }
+
+    #[Route('/effectif', name: 'app_cendre_effectif')]
+    public function Effectif(): Response
+    {;
+        return $this->render('cendre/effectif.html.twig', [
+            'members' => $this->user_manager->getMembers(1, 'Cendre Mortuaire'),
+        ]);
     }
 }
