@@ -24,15 +24,19 @@
                 </thead>
                 <tbody>
                     {% for member in members %}
-                        <tr>
-                            <td>{{ member.name_user }}</td>
-                            <td>{{ member.grade_user }}</td>
-                            <td>Actif</td>
-                            <td>
-                                <button class="btn btn-primary btn-sm">Modifier</button>
-                                <button class="btn btn-danger btn-sm">Supprimer</button>
-                            </td>
-                        </tr>
+                        <form method="post" action="{{ path('app_cendre_effectif_delete') }}">
+                            <input type="hidden" value="{{ member.name_user }}" name="name-user">
+                            <input type="hidden" value="{{ member.grade_user }}" name="grade-user">
+                            <tr>
+                                <td>{{ member.name_user }}</td>
+                                <td>{{ member.grade_user }}</td>
+                                <td>Actif</td>
+                                <td>
+                                    <button type="submit" class="btn btn-primary btn-sm">Modifier</button>
+                                    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                </td>
+                            </tr>
+                        </form>
                     {% endfor %}
             </table>
         </div>

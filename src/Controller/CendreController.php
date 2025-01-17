@@ -116,6 +116,6 @@ class CendreController extends AbstractController
 
         $this->user_manager->DeleteMember(1, 'Cendre Mortuaire', $identite, $grade);
 
-        return $this->redirectToRoute('/effectif');
+        return $this->redirectToRoute('app_cendre_effectif');
     }
 }
