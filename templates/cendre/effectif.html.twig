@@ -3,5 +3,38 @@
 {% block title %}Informations générales{% endblock %}
 
 {% block body %}
-    <h1>Membres</h1>
+    <div class="container">
+        <h1 class="mt-4">Gestion des Effectifs</h1>
+        <p class="lead">
+            Cette page permet de visualiser et de gérer les effectifs de la Cendre Mortuaire. Vous pouvez ajouter, modifier
+            ou supprimer les informations des membres directement depuis ce tableau.
+        </p>
+
+        <!-- Tableau des effectifs -->
+        <div class="mt-4">
+            <h2>Tableau des Effectifs</h2>
+            <table class="table table-striped table-bordered">
+                <thead class="table-dark">
+                <tr>
+                    <th>Nom</th>
+                    <th>Rang</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for member in members %}
+                        <tr>
+                            <td>{{ member.name_user }}</td>
+                            <td>{{ member.grade_user }}</td>
+                            <td>Actif</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm">Modifier</button>
+                                <button class="btn btn-danger btn-sm">Supprimer</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+            </table>
+        </div>
+    </div>
 {% endblock %}

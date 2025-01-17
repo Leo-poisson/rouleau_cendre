@@ -64,11 +64,35 @@ class CendreController extends AbstractController
         return $this->render('cendre/connaissances.html.twig');
     }
 
+    #[Route('/rituel-engendrement', name: 'app_cendre_rituel_engendrement')]
+    public function RituelEngendrement(): Response
+    {
+        return $this->render('cendre/rituel_engendrement.html.twig');
+    }
+
+    #[Route('/principes-cloitre', name: 'app_cendre_principes_cloitre')]
+    public function PrincipesCloitre(): Response
+    {
+        return $this->render('cendre/principes_cloitre.html.twig');
+    }
+
+    #[Route('/rite-retour-origines', name: 'app_cendre_rite_retour_origines')]
+    public function RiteRetourOrigines(): Response
+    {
+        return $this->render('cendre/rite_retour_origines.html.twig');
+    }
+
+    #[Route('/nuit-cendrée', name: 'app_cendre_nuit_cendree')]
+    public function NuitCendree(): Response
+    {
+        return $this->render('cendre/nuit_cendree.html.twig');
+    }
+
     #[Route('/effectif', name: 'app_cendre_effectif')]
     public function Effectif(): Response
     {;
         return $this->render('cendre/effectif.html.twig', [
-            'members' => $this->user_manager->getMembers(1, 'Cendre Mortuaire'),
+            'members' => $this->user_manager->GetMembers(1, 'Cendre Mortuaire'),
         ]);
     }
 }
