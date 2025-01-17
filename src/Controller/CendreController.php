@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Manager\UserManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -90,9 +91,31 @@ class CendreController extends AbstractController
 
     #[Route('/effectif', name: 'app_cendre_effectif')]
     public function Effectif(): Response
-    {;
+    {
         return $this->render('cendre/effectif.html.twig', [
             'members' => $this->user_manager->GetMembers(1, 'Cendre Mortuaire'),
         ]);
+    }
+
+    #[Route('/effectif/update', name: 'app_cendre_effectif_update')]
+    public function EffectifUpdate(Request $request): Response
+    {
+        $identite = $request->get('name-user');
+        $grade = $request->get('grade-user');
+
+        $this->user_manager->UpdateMember($grade, 1, 'Cendre Mortuaire', $identite);
+
+        return $this->redirectToRoute('/effectif');
+    }
+
+    #[Route('/effectif/delete', name: 'app_cendre_effectif_delete')]
+    public function EffectifDelete(Request $request): Response
+    {
+        $identite = $request->get('name-user');
+        $grade = $request->get('grade-user');
+
+        $this->user_manager->DeleteMember(1, 'Cendre Mortuaire', $identite, $grade);
+
+        return $this->redirectToRoute('/effectif');
     }
 }
