@@ -23,21 +23,39 @@
                 </tr>
                 </thead>
                 <tbody>
-                    {% for member in members %}
-                        <form method="post" action="{{ path('app_cendre_effectif_delete') }}">
-                            <input type="hidden" value="{{ member.name_user }}" name="name-user">
-                            <input type="hidden" value="{{ member.grade_user }}" name="grade-user">
-                            <tr>
-                                <td>{{ member.name_user }}</td>
-                                <td>{{ member.grade_user }}</td>
-                                <td>Actif</td>
-                                <td>
-                                    <button type="submit" class="btn btn-primary btn-sm">Modifier</button>
-                                    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                                </td>
-                            </tr>
-                        </form>
-                    {% endfor %}
+                {% for member in members %}
+                    <tr>
+                        <td>{{ member.name_user }}</td>
+                        <td>
+                            <form method="post" action="{{ path('app_cendre_effectif_update') }}" id="update_{{ member.name_user }}">
+                                <input type="hidden" value="{{ member.name_user }}" name="name-user">
+                                <input type="hidden" value="{{ member.grade_user }}" name="last-grade-user">
+                                <select name="grade-user" class="form-select">
+                                    {% for faction in factions %}
+                                        {% if faction.id_faction == 1 %}
+                                            {% for grades in faction.grades_faction %}
+                                                {% for grade in grades %}
+                                                    <option value="{{ grade }}" {% if grade == member.grade_user %}selected{% endif %}>
+                                                        {{ grade }}
+                                                    </option>
+                                                {% endfor %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </td>
+                        <td>Actif</td>
+                        <td>
+                            <button form="update_{{ member.name_user }}" type="submit" class="btn btn-primary btn-sm">Modifier</button>
+                            <form method="post" action="{{ path('app_cendre_effectif_delete') }}" style="display: inline;">
+                                <input type="hidden" value="{{ member.name_user }}" name="name-user">
+                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
             </table>
         </div>
     </div>

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Manager\FactionManager;
 use App\Manager\UserManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -20,6 +21,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class CendreController extends AbstractController
 {
     public function __construct(
+        private FactionManager $faction_manager,
         private UserManager $user_manager,
     ) {  }
 
@@ -92,8 +94,20 @@ class CendreController extends AbstractController
     #[Route('/effectif', name: 'app_cendre_effectif')]
     public function Effectif(): Response
     {
+        $datas = $this->faction_manager->getFactions();
+
+        foreach ($datas as &$data) {
+            if (isset($data['grades_faction'])) {
+                $data['grades_faction'] = json_decode($data['grades_faction'], true);
+            }
+            if (isset($data['capacities_faction'])) {
+                $data['capacities_faction'] = json_decode($data['capacities_faction'], true);
+            }
+        }
+
         return $this->render('cendre/effectif.html.twig', [
             'members' => $this->user_manager->GetMembers(1, 'Cendre Mortuaire'),
+            'factions' => $datas,
         ]);
     }
 
@@ -102,17 +116,18 @@ class CendreController extends AbstractController
     {
         $identite = $request->get('name-user');
         $grade = $request->get('grade-user');
+        $last_grade = $request->get('last-grade-user');
 
-        $this->user_manager->UpdateMember($grade, 1, 'Cendre Mortuaire', $identite);
+        $this->user_manager->UpdateMember($grade, 1, 'Cendre Mortuaire', $identite, $last_grade);
 
-        return $this->redirectToRoute('/effectif');
+        return $this->redirectToRoute('app_cendre_effectif');
     }
 
     #[Route('/effectif/delete', name: 'app_cendre_effectif_delete')]
     public function EffectifDelete(Request $request): Response
     {
         $identite = $request->get('name-user');
-        $grade = $request->get('grade-user');
+        $grade = $request->get('last-grade-user');
 
         $this->user_manager->DeleteMember(1, 'Cendre Mortuaire', $identite, $grade);
 

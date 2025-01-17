@@ -21,16 +21,17 @@ class UserManager
         ]);
     }
 
-    public function UpdateMember(string $grade, int $faction, string $capacity, string $name) {
+    public function UpdateMember(string $grade, int $faction, string $capacity, string $name, string $last_grade) {
         return $this->db->executeStatement('
             UPDATE "user"
             SET grade_user = :grade
-            WHERE id_faction = :faction AND capacity_user = :capacity AND name_user = :name AND grade_user = :grade'
+            WHERE id_faction = :faction AND capacity_user = :capacity AND name_user = :name AND grade_user = :last_grade'
             , [
                 'grade' => $grade,
                 'faction' => $faction,
                 'capacity' => $capacity,
-                'name' => $name
+                'name' => $name,
+                'last_grade' => $last_grade
             ]);
     }
 
